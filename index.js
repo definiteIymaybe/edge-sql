@@ -20,6 +20,7 @@ let emscripten_module = new Promise((resolve, reject) => {
   })
 })
 
+// Fetch all the data from Google and return the value as a string.
 async function fetchDataFromGoogle() {
   var cfFetchOptions = {
     // Always cache this fetch regardless of content type
@@ -31,8 +32,8 @@ async function fetchDataFromGoogle() {
     "https://storage.googleapis.com/covidrefresh/database/alldata.csv",
     {
       cf: cfFetchOptions
-    });
-  return response.body;
+    }).then(x => x.text());
+  return response;
 }
 
 async function handleRequest(event) {
