@@ -2,15 +2,15 @@
 import emscripten from './build/module.js'
 
 addEventListener('fetch', event => {
-  event.respondWith(handleRequest(event))
-})
+  event.respondWith(handleRequest(event));
+});
 
 let emscripten_module = new Promise((resolve, reject) => {
   emscripten({
     instantiateWasm(info, receive) {
-      let instance = new WebAssembly.Instance(wasm, info)
+      let instance = new WebAssembly.Instance(wasm, info);
       receive(instance)
-      return instance.exports
+      return instance.exports;
     },
   }).then(module => {
     resolve({
@@ -26,8 +26,8 @@ async function fetchDataFromGoogle() {
     // for a max of 300 seconds before revalidating the resource
     cacheTtl: 300,
     cacheEverything: true,
-};
-  response = await fetch(
+  };
+  let response = await fetch(
     "https://storage.googleapis.com/covidrefresh/database/alldata.csv",
     {
       cf: cfFetchOptions
@@ -43,15 +43,15 @@ async function handleRequest(event) {
 
     let data = await fetchDataFromGoogle();
 
-    let wmod = await emscripten_module
+    let wmod = await emscripten_module;
 
     let query = "SELECT count(*) FROM vaccinations;";
-    if(request.method == "POST") {
-        query = await request.text()
+    if (request.method == "POST") {
+      query = await request.text()
     }
 
     let result = wmod.query(
-      "CREATE VIRTUAL TABLE temp.vaccinations USING csv(data='"+data+"',header);"+query,
+      "CREATE VIRTUAL TABLE temp.vaccinations USING csv(data='" + data + "',header);" + query,
       String(request.cf.country),
       String(request.cf.asn),
       String(request.cf.colo),
@@ -64,14 +64,15 @@ async function handleRequest(event) {
       String(request.headers.get("User-Agent"))
     );
 
-    let newResponse = new Response(result, {status: 200,
+    let newResponse = new Response(result, {
+      status: 200,
       headers: {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Headers': '*'
-        }
-      });
+      }
+    });
     return newResponse;
   } else {
-    return new Response("not found", {status: 404})
+    return new Response("not found", { status: 404 })
   }
 }
