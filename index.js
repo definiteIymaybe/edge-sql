@@ -24,8 +24,8 @@ let emscripten_module = new Promise((resolve, reject) => {
 async function fetchDataFromGoogle() {
   var cfFetchOptions = {
     // Always cache this fetch regardless of content type
-    // for a max of 300 seconds before revalidating the resource
-    cacheTtl: 300,
+    // for a max of 5 seconds before revalidating the resource
+    cacheTtl: 5,
     cacheEverything: true,
   };
   let response = await fetch(
