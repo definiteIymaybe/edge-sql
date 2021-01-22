@@ -15,10 +15,6 @@ jobs:
     - uses: actions/setup-node@v1
       with:
         node-version: '14.x'
-    - run: 'echo kv_namespaces = [ { binding = \"SQLCSV\", id = \"$KVNS\" }] >> wrangler.toml'
-      shell: bash
-      env:
-        KVNS: ${{ secrets.KVNS }}
     - name: Install deps
       run: npm install
     - name: Install Wrangler
