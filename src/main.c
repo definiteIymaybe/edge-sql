@@ -233,6 +233,7 @@ query(char * query,
   }
 
   sqlite3_create_module(pDb, "csv", &CsvModule, 0);
+  RegisterExtensionFunctions(pDb);
 
   userdata = calloc(USER_DATA_COUNT, sizeof(char*));
   userdata[USER_DATA_COUNTRY] = country;
