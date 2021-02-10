@@ -3,6 +3,7 @@
 #include <string.h>
 #include "sqlite3.h"
 #include "csv.c"
+#include "extension-functions.c"
 
 
 #ifndef NOEMS
@@ -120,7 +121,7 @@ int cb(
   char **azCol     /* Column names */
 ) {
   int i;
-  
+
   struct params *p = (struct params*) pArg;
 
   if( p->hdr ){
@@ -139,7 +140,7 @@ int cb(
     }
     write_csv(&(p->cur), &(p->size), &(p->reply), "\n");
     p->hdr = 0;
-    
+
   }
   if( nArg>0 ){
     for(i=0; i<nArg; i++){
@@ -205,9 +206,9 @@ static void user_data_func(
   sqlite3_result_blob(context, data, c, SQLITE_TRANSIENT);
 }
 
-char * 
+char *
 #ifndef NOEMS
-EMSCRIPTEN_KEEPALIVE 
+EMSCRIPTEN_KEEPALIVE
 #endif
 //query(int sth)
 query(char * query,
@@ -250,7 +251,7 @@ query(char * query,
     0, user_data_func, 0, 0);
 
   size_t size = 100000*sizeof(char);
-  
+
   char * err;
   p.hdr = 1;
 
